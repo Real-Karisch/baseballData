@@ -26,3 +26,5 @@ print(len(gamepk))
 #cuck
 #testicles
 
+#cock
+
