@@ -240,7 +240,7 @@ game root
 			link
 	liveData
 		plays
-			allplays
+			allPlays
 				<play>
 					result
 						type
