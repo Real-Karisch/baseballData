@@ -13,13 +13,15 @@ pkfire = [599371, 415239]
 
 jack = pd.read_pickle("testDataFramePickle.pkl")
 
-print(jack.pitchHand.unique())
+#print(jack.pitchHand.unique())
 
 penis = generateGamePksFromDates('06/04/2018', '06/04/2018')
 
 cock = pitchDatasetCreateMaster(penis, defaultEvent, defaultAtBat, defaultGame)
 
-print(cock)
+#print(cock)
+
+cock.to_csv(path_or_buf = 'test.csv', index = False)
 
 """
 gameTest = statsapi.get('game', {'gamePk': 599371})

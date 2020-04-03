@@ -1,66 +1,66 @@
-gamePk
-date
-homeTeam
-awayTeam
-pitcher
-batter
-homeScore (this will be after the atbat)
-awayScore (this will be after the atbat)
-balls
-strikes
-outs
-inning
-halfInning
-runnerFirst
-runnerSecond
-runnerThird
-pitchCount
-atbat
-pitchType
-batSide
-pitchHand
-inPlay
-calledStrike
-swingingStrike
-ball
-foul
-numOuts
-doublePlay
-triplePlay
-endingBase
-eventDescription
-zone
-extension
-startSpeed
-szTop
-szBottom
-aX
-ay 
-aZ
-pfxX
-pfxZ
-pX 
-pZ 
-vX0
-vY0
-vZ0
-x 
-y 
-x0 
-y0 
-z0 
-breakAngle
-breakLength
-breakY
-spinRate
-spinDirection
-plateTime
-launchSpeed
-launchAngle
-totalDistance
-trajectory
-hardness
-location
-coordX
-coordY
-rbis
+#gamePk
+#date
+#homeTeam
+#awayTeam
+#pitcher
+#batter
+#homeScore (this will be after the atbat)
+#awayScore (this will be after the atbat)
+#balls
+#strikes
+#outs
+#inning
+#halfInning
+#runnerFirst %check runner1id, runner1StartBase and runner1EndBase
+#runnerSecond %
+#runnerThird %
+#pitchCount
+#atbat
+#pitchType
+#batSide
+#pitchHand
+#inPlay
+#calledStrike %check pitchResult
+#swingingStrike %check pitchResult
+#ball
+#foul %check pitchResult
+#numOuts (after the at bat) %check numOutsAtBat
+#doublePlay %pretty sure this can be constructed using eventDescription and numOutsAtBat
+#triplePlay %pretty sure this can be constructed using eventDescription and numOutsAtBat
+#endingBase
+#eventDescription %see eventType
+#zone
+#extension
+#startSpeed
+#szTop
+#szBottom
+#aX
+#ay 
+#aZ
+#pfxX
+#pfxZ
+#pX 
+#pZ 
+#vX0
+#vY0
+#vZ0
+#x 
+#y 
+#x0 
+#y0 
+#z0 
+#breakAngle
+#breakLength
+#breakY
+#spinRate
+#spinDirection
+#plateTime
+#launchSpeed
+#launchAngle
+#totalDistance
+#trajectory
+#hardness
+#location
+#coordX
+#coordY
+#rbis

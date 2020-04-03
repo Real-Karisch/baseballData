@@ -20,17 +20,16 @@ def generateGamePksFromDates(startDate, endDate):
 #        gameLocations is a dictionary like the two above, except it includes items at the game level (e.g. home team/away team, date, lineups, etc.)
 #output: a single dataframe with every feature in the dictionaries provided (one row per event), from every gamePk provided
 def pitchDatasetCreateMaster(gamePks, eventLocations, atBatLocations, gameLocations):
-    ind = list(eventLocations.keys()) #making index for column names of output dataframe
+    ind = list(gameLocations.keys()) #making index for column names of output dataframe
     ind.extend(list(atBatLocations.keys()))
-    ind.extend(list(gameLocations.keys()))
-
+    ind.extend(list(eventLocations.keys()))
     outDF = pd.DataFrame(columns = ind) #setting up empty output dataframe
 
     #loop to generate raw data for each game, then turn the raw game data into a dataframe and append it to the master dataframe
     for i in gamePks:
         activeGame = statsapi.get('game', {'gamePk': i}) #call to mlb site to scrape raw game data as JSON file
         activeDF = pitchDatasetCreateGame(activeGame, eventLocations, atBatLocations, gameLocations, ind) #generate dataframe from game JSON file
-        outDF = outDF.append(activeDF) #concatenate the latest game with the master dataframe
+        outDF = outDF.append(activeDF, sort = False) #concatenate the latest game with the master dataframe
 
     return(outDF)
 
@@ -54,7 +53,7 @@ def pitchDatasetCreateGame(gameJson, eventLocations, atBatLocations, gameLocatio
         jCnt = 0 #counter for event index
 
         #loop to access data for each event within the current at at bat
-        for j in i['playEvents']: 
+        for j in i['playEvents']:
             outDF.append(pd.Series(), ignore_index = True) #append empty row to output dataframe
             nrow, _ = outDF.shape
             eventIndex = [iCnt, jCnt] #current at bat and event within that at bat
@@ -67,6 +66,30 @@ def pitchDatasetCreateGame(gameJson, eventLocations, atBatLocations, gameLocatio
             #loop to populate output dataframe with at bat-level attributes
             for keyAtBat, valAtBat in atBatLocations.items():
                 outDF.loc[nrow, keyAtBat] = jsonFind(gameJson, valAtBat, atBatIndex) #atBatIndex (created above) is a list with the current at bat
+
+            runnerLength = 8 #setting total number of maximum allowable runners (if true number of runners exceeds this number info is lost)
+            runnerIDs = ['NA'] * runnerLength #prepping runner items to include
+            runnerStartBase = ['NA'] * runnerLength
+            runnerEndBase = ['NA'] * runnerLength
+
+            numRunners = len(i['runners']) #variable that contains true number of runners for each at bat
+
+            #loop to populate vectors with runner attributes
+            for k in range(numRunners):
+                runnerIDs[k] = jsonFind(i, ['runners', 'details', 'runner', 'id'], [k]) 
+                runnerStartBase[k] = jsonFind(i, ['runners', 'movement', 'start'], [k]) #note for future handling: this value could be null
+                runnerEndBase[k] = jsonFind(i, ['runners', 'movement', 'end'], [k]) #note for future handling: this value could be null
+            
+            for runLoop in range(runnerLength):
+                tempRunnerStr = 'runner' + str(runLoop + 1)
+
+                tempIdStr = tempRunnerStr + 'id'
+                tempStartBaseStr = tempRunnerStr + 'StartBase'
+                tempEndBaseStr = tempRunnerStr + 'EndBase'
+
+                outDF.loc[nrow, tempIdStr] = runnerIDs[runLoop]
+                outDF.loc[nrow, tempStartBaseStr] = runnerStartBase[runLoop]
+                outDF.loc[nrow, tempEndBaseStr] = runnerEndBase[runLoop]
 
             #loop to populate output dataframe with event-level attributes
             for keyEvent, valEvent in eventLocations.items(): #eventIndex (created above) is a list with the current at bat and the current event
