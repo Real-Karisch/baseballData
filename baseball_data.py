@@ -3,8 +3,8 @@ import numpy as np
 import pandas as pd
 
 #function to generate the unique game pk (ID) for each game played between the dates provided (inclusive)
-#inputs: startDate is the beginning of the period of games to be pulled ('mm/dd/yyyy' format)
-#        endDate is the last day of the period ('mm/dd/yyyy' format)
+#inputs: startDate is the beginning of the period of games to be pulled ('mm/dd/yyyy' string format)
+#        endDate is the last day of the period ('mm/dd/yyyy' string format)
 #output: a list of game pks
 def generateGamePksFromDates(startDate, endDate):
     sched = statsapi.schedule(start_date = startDate, end_date = endDate) #call to the mlb website to scrape the raw data
@@ -76,9 +76,17 @@ def pitchDatasetCreateGame(gameJson, eventLocations, atBatLocations, gameLocatio
 
             #loop to populate vectors with runner attributes
             for k in range(numRunners):
-                runnerIDs[k] = jsonFind(i, ['runners', 'details', 'runner', 'id'], [k]) 
-                runnerStartBase[k] = jsonFind(i, ['runners', 'movement', 'start'], [k]) #note for future handling: this value could be null
-                runnerEndBase[k] = jsonFind(i, ['runners', 'movement', 'end'], [k]) #note for future handling: this value could be null
+                runnerIDs[k] = jsonFind(i, ['runners', 'details', 'runner', 'id'], [k])
+
+                if jsonFind(i, ['runners', 'movement', 'start'], [k]) is None: #check whether the item is null (easier to do here than later)
+                    runnerStartBase[k] = 'home' #if null it means home plate start (i.e. batter)
+                else:
+                    runnerStartBase[k] = jsonFind(i, ['runners', 'movement', 'start'], [k]) #else use the normal value
+
+                if jsonFind(i, ['runners', 'movement', 'end'], [k]) is None: #check for null
+                    runnerEndBase[k] = 'home' #if null it means home plate end (i.e. out or homerun)
+                else:
+                    runnerEndBase[k] = jsonFind(i, ['runners', 'movement', 'end'], [k]) #else use normal value
             
             for runLoop in range(runnerLength):
                 tempRunnerStr = 'runner' + str(runLoop + 1)
