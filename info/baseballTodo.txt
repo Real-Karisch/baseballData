@@ -29,10 +29,8 @@ Populate tables
 	pitches
 		pull in game data iteratively to populate
 	--venues
-	teams
-		use team endpoint
-	players
-		use player endpoint
+	--teams
+	--players
 	leagues
 		use league endpoint
 	divisions
