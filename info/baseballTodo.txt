@@ -39,3 +39,7 @@ Populate tables
 		pull in game data iteratively
 	actions
 		pull in game data iteratively
+
+Add seasons and sports tables
+	seasons table will have date info by sport
+	sports table will have name, abbrev, etc info
