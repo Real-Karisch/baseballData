@@ -1,0 +1,43 @@
+FINISH THE SQL DATABASE
+--Define all tables
+	--games
+	--atbats
+	--pitches
+	--venues
+	--teams
+	--players
+	--leagues
+	--divisions
+	--runners
+	--actions
+--Link all tables
+	--games
+	--atbats
+	--pitches
+	--venues
+	--teams
+	--players
+	--leagues
+	--divisions
+	--runners
+	--actions
+Populate tables
+	games
+		pull in game data iteratively to populate
+	atbats
+		pull in game data iteratively to populate
+	pitches
+		pull in game data iteratively to populate
+	--venues
+	teams
+		use team endpoint
+	players
+		use player endpoint
+	leagues
+		use league endpoint
+	divisions
+		use division endpoint
+	runners
+		pull in game data iteratively
+	actions
+		pull in game data iteratively
