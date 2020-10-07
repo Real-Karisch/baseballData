@@ -1,0 +1,184 @@
+CREATE TABLE games (
+
+pk INT,
+type VARCHAR (50),
+doubleHeader VARCHAR (50),
+id VARCHAR (50),
+gamedayType VARCHAR (50),
+tieBreaker VARCHAR (50),
+calendarEventID VARCHAR (50),
+season INT,
+seasonDisplay INT,
+
+datetime VARCHAR (50),
+originalDate VARCHAR (50),
+dayNight VARCHAR (50),
+time VARCHAR (50),
+ampm VARCHAR (50),
+
+awayID VARCHAR (50),
+
+awayGamesPlayed INT,
+awayWins INT,
+awayLosses INT,
+awayDivisionLeader VARCHAR (50),
+
+homeID VARCHAR (50),
+
+homeGamesPlayed INT,
+homeWins INT,
+homeLosses INT,
+homeDivisionLeader VARCHAR (50),
+
+venueID INT,
+
+weatherConditions VARCHAR (50),
+temp INT,
+wind VARCHAR (50),
+
+attendance INT,
+gameDurationMinutes INT,
+
+noHitter VARCHAR (50),
+perfectGame VARCHAR (50),
+
+
+
+PRIMARY KEY (pk),
+FOREIGN KEY (awayID, season)
+	REFERENCES teams (id, season),
+FOREIGN KEY (homeID, season)
+	REFERENCES teams (id, season),
+FOREIGN KEY (venueID)
+	REFERENCES venues (id)
+
+
+);
+
+########################################################################################################
+
+CREATE TABLE plays (
+
+gamePk INT,
+
+type VARCHAR (50),
+event VARCHAR (50),
+eventType VARCHAR (50),
+desc VARCHAR (300),
+rbi INT,
+awayScore INT,
+homeScore INT,
+
+atBatIndex INT,
+
+
+PRIMARY KEY (gamePk, atBatIndex),
+
+);
+
+########################################################################################################
+
+CREATE TABLE pitches (
+
+);
+
+########################################################################################################
+
+CREATE TABLE venues (
+
+id INT,
+name VARCHAR (50),
+
+PRIMARY KEY (id)
+
+);
+
+########################################################################################################
+
+CREATE TABLE teams (
+
+id INT,
+name VARCHAR (50),
+season INT,
+venueID INT,
+teamCode VARCHAR (50),
+fileCode VARCHAR (50),
+abbreviation VARCHAR (50),
+teamName VARCHAR (50),
+locationName VARCHAR (50),
+firstYearOfPlay INT,
+leagueID INT,
+divisionID INT,
+shortName VARCHAR (50),
+
+PRIMARY KEY (id, season),
+FOREIGN KEY (venueID)
+	REFERENCES venues (id),
+FOREIGN KEY (leagueID)
+	REFERENCES leagues (id),
+FOREIGN KEY (divisionID)
+	REFERENCES divisions (id)
+
+);
+
+########################################################################################################
+
+CREATE TABLE players (
+
+id INT,
+fullName VARCHAR (50),
+firstName VARCHAR (50),
+lastName VARCHAR (50),
+primaryNumber VARCHAR (50),
+birthDate VARCHAR (50),
+birthCity VARCHAR (50),
+birthCountry VARCHAR (50),
+height VARCHAR (50),
+weight INT,
+
+positionCode INT,
+positionName VARCHAR (50),
+positionType VARCHAR (50),
+positionAbbrev VARCHAR (50),
+
+useName VARCHAR (50),
+middleName VARCHAR (50),
+boxscoreName VARCHAR (50),
+nameMatrilineal VARCHAR (50),
+isPlayer VARCHAR (50),
+mlbDebutDate VARCHAR (50),
+
+batSideCode VARCHAR (50),
+batSideDesc VARCHAR (50),
+
+pitchHandCode VARCHAR (50),
+pitchHandDesc VARCHAR (50),
+
+szTop FLOAT (2),
+szBottom FLOAT (2),
+
+PRIMARY KEY (id)
+
+);
+
+########################################################################################################
+
+CREATE TABLE leagues (
+
+id_season VARCHAR (50),
+id INT,
+season INT,
+name VARCHAR (50),
+abbrev VARCHAR (50),
+nameShort VARCHAR (50),
+
+regSeasonStart VARCHAR (50),
+regSeasonEnd VARCHAR (50),
+preSeasonStart VARCHAR (50),
+preSeasonEnd VARCHAR (50),
+
+PRIMARY KEY (id_season)
+
+);
+
+########################################################################################################
