@@ -22,7 +22,7 @@ def dictTry(dict, keyList):
         else:
             active = active[keyList[i]]
 
-def populateVenueTable(dbConnection):
+def populateVenueTable(dbConnection, schema):
     teams = statsapi.get('teams', {})
 
     venueIds = []
@@ -32,14 +32,16 @@ def populateVenueTable(dbConnection):
         if activeVenue not in venueIds:
             venueIds.append(team['venue']['id'])
             manyList.append((team['venue']['id'], team['venue']['name']))
+    
+    command = """
+                INSERT INTO {schema}.venues(id, name)
+                    VALUES (%s, %s)
+                """
 
     with dbConnection.cursor() as cur:
         psycopg2.extras.execute_batch(
             cur,
-            """
-            INSERT INTO venues(id, name)
-                VALUES (%s, %s)
-            """,
+            command.format(schema = schema),
             manyList
         )
 
@@ -73,7 +75,7 @@ def populateTeamTable(dbConnection):
         psycopg2.extras.execute_batch(
             cur,
             """
-            INSERT INTO teams(
+            INSERT INTO major.teams(
                 id, 
                 name,
                 season,
@@ -142,7 +144,7 @@ def populatePlayerTable(dbConnection):
         psycopg2.extras.execute_batch(
             cur,
             """
-            INSERT INTO players(
+            INSERT INTO major.players(
                 id,
                 "fullName",
                 "firstName",
