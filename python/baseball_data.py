@@ -9,7 +9,7 @@ import pandas as pd
 def generateGamePksFromDates(startDate, endDate):
     sched = statsapi.schedule(start_date = startDate, end_date = endDate) #call to the mlb website to scrape the raw data
     gamePks = [x['game_id'] for x in sched] #list comp to pull the gamePk from each game scraped (come through in JSON format)
-    return(gamePks)
+    return gamePks
 
 #function to run the master dataframe that is a concatenation of each game dataframe from the provided gamePks
 #inputs: gamePks is a list of gamePks
@@ -126,7 +126,7 @@ def jsonFind(jsonObj, path, index):
             temp = temp[index[cnt]] #access the element given by index
             cnt += 1 #increment counter for next list to be encountered
         if path[i] not in temp: #if the next key is not in the value of the current dictionary
-            return('NA') #return 'NA' to be processed later
+            return None #return 'NA' to be processed later
         temp = temp[path[i]] #move to next dictionary/list
 
     return(temp)
