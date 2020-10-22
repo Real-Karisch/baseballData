@@ -40,6 +40,15 @@ Populate tables
 	actions
 		pull in game data iteratively
 
-Add seasons and sports tables
-	seasons table will have date info by sport
-	sports table will have name, abbrev, etc info
+--Need to move major league tables out of public schema
+
+Need to make another schema to hold minor league stats
+	Will have similar info, but focus will be on players (no league/division tables, etc.)
+	Tables to create:
+		games
+		sports
+		seasons (cols: sport, season, dates)
+		actions
+		atbats
+		pitches
+		runners

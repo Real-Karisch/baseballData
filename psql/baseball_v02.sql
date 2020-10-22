@@ -354,7 +354,120 @@ CREATE TABLE major.venues (
 
 ALTER TABLE major.venues OWNER TO karisch;
 
+--
+-- TOC entry 2983 (class 0 OID 32924)
+-- Dependencies: 204
+-- Data for Name: actions; Type: TABLE DATA; Schema: major; Owner: karisch
+--
 
+COPY major.actions ("gamePk", "atBatIndex", "actionIndex", "eventType", "awayScore", "homeScore", "isScoringPlay", balls, strikes, outs, "isPitch", "playerId", "eventDescription") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2984 (class 0 OID 32927)
+-- Dependencies: 205
+-- Data for Name: atBats; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major."atBats" ("gamePk", "atBatIndex", result, "resultType", "resultDesc", rbi, "awayScore", "homeScore", "isTopInning", inning, "isScoringPlay", "hasReview", "hasOut", "captivatingIndex", "batterID", "batSideCode", "batSideDesc", "pitcherID") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2985 (class 0 OID 32933)
+-- Dependencies: 206
+-- Data for Name: divisions; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.divisions (id, name, "nameShort", abbrev, "leagueId", "hasWildcard", season) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2986 (class 0 OID 32936)
+-- Dependencies: 207
+-- Data for Name: games; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.games (pk, type, "doubleHeader", id, "gamedayType", "tieBreaker", "calendarEventID", season, "seasonDisplay", datetime, "originalDate", "dayNight", "time", ampm, "awayGamesPlayed", "awayWins", "awayLosses", "awayDivisionLeader", "homeGamesPlayed", "homeWins", "homeLosses", "homeDivisionLeader", "venueID", "weatherConditions", temp, wind, "noHitter", "perfectGame", "awayId", "homeId") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2987 (class 0 OID 32942)
+-- Dependencies: 208
+-- Data for Name: leagues; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.leagues (id, season, name, abbrev, "nameShort", "regSeasonStart", "regSeasonEnd", "preSeasonStart", "preSeasonEnd") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2988 (class 0 OID 32945)
+-- Dependencies: 209
+-- Data for Name: pitches; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.pitches ("gamePk", "atBatIndex", "pitchIndex", "callCode", "callDesc", "isInPlay", "isStrike", "isBall", "typeCode", "typeDesc", "hasReview", "countBalls", "countStrikes", "startSpeed", "endSpeed", "szTop", "szBottom", "aX", "aY", "aZ", "pfxX", "pfxZ", "pX", "pZ", "vX0", "vY0", "vZ0", x, y, x0, y0, z0, "breakAngle", "breakLength", "breakY", "spinRate", "spinDirection", zone, "typeConfidence", "plateTime", extension, "pitchNumber", "launchSpeed", "launchAngle", "totalDistance", trajectory, hardness, location, "coordX", "coordY") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2989 (class 0 OID 32952)
+-- Dependencies: 210
+-- Data for Name: players; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.players (id, "fullName", "firstName", "lastName", "primaryNumber", "birthDate", "birthCity", "birthCountry", height, weight, "positionCode", "positionName", "positionType", "positionAbbrev", "useName", "middleName", "boxscoreName", "isPlayer", "mlbDebutDate", "batSideCode", "batSideDesc", "pitchHandCode", "pitchHandDesc", "szTop", "szBottom") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2990 (class 0 OID 32958)
+-- Dependencies: 211
+-- Data for Name: runners; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.runners ("gamePk", "atBatIndex", "playIndex", "startBase", "endBase", "isOut", "outNumber", "eventType", "movementReason", "runnerId", "isScoringEvent", rbi, earned, "outBase") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2993 (class 0 OID 33080)
+-- Dependencies: 214
+-- Data for Name: seasons; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.seasons ("seasonId", "regSeasStartDate", "regSeasEndDate", "preSeasStartDate", "preSeasEndDate", "postSeasStartDate", "postSeasEndDate", "lastDate1stHalf", "firstDate2ndHalf", "allStarDate") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2991 (class 0 OID 32964)
+-- Dependencies: 212
+-- Data for Name: teams; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.teams (id, name, season, "venueID", "teamCode", "fileCode", abbrev, "teamName", "locationName", "firstYearOfPlay", "leagueID", "divisionID", "shortName") FROM stdin;
+\.
+
+
+--
+-- TOC entry 2992 (class 0 OID 32967)
+-- Dependencies: 213
+-- Data for Name: venues; Type: TABLE DATA; Schema: major; Owner: karisch
+--
+
+COPY major.venues (id, name) FROM stdin;
+\.
+
+
+--
+-- TOC entry 2814 (class 2606 OID 32971)
+-- Name: actions actions_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
+--
 
 ALTER TABLE ONLY major.actions
     ADD CONSTRAINT actions_pkey PRIMARY KEY ("gamePk", "atBatIndex", "actionIndex");
