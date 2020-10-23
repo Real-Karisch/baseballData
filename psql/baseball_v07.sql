@@ -5,7 +5,7 @@
 -- Dumped from database version 12.3 (Ubuntu 12.3-1.pgdg18.04+1)
 -- Dumped by pg_dump version 12.4
 
--- Started on 2020-10-22 00:28:33
+-- Started on 2020-10-22 23:18:58
 
 SET statement_timeout = 0;
 SET lock_timeout = 0;
@@ -43,7 +43,7 @@ SET default_tablespace = '';
 SET default_table_access_method = heap;
 
 --
--- TOC entry 204 (class 1259 OID 32924)
+-- TOC entry 204 (class 1259 OID 33935)
 -- Name: actions; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -67,11 +67,11 @@ CREATE TABLE major.actions (
 ALTER TABLE major.actions OWNER TO karisch;
 
 --
--- TOC entry 205 (class 1259 OID 32927)
--- Name: atBats; Type: TABLE; Schema: major; Owner: karisch
+-- TOC entry 205 (class 1259 OID 33941)
+-- Name: atbats; Type: TABLE; Schema: major; Owner: karisch
 --
 
-CREATE TABLE major."atBats" (
+CREATE TABLE major.atbats (
     "gamePk" integer NOT NULL,
     "atBatIndex" integer NOT NULL,
     result character varying(50),
@@ -93,10 +93,10 @@ CREATE TABLE major."atBats" (
 );
 
 
-ALTER TABLE major."atBats" OWNER TO karisch;
+ALTER TABLE major.atbats OWNER TO karisch;
 
 --
--- TOC entry 206 (class 1259 OID 32933)
+-- TOC entry 206 (class 1259 OID 33947)
 -- Name: divisions; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -106,15 +106,14 @@ CREATE TABLE major.divisions (
     "nameShort" character varying(50),
     abbrev character varying(50),
     "leagueId" integer,
-    "hasWildcard" character varying(50),
-    season integer
+    "hasWildcard" character varying(50)
 );
 
 
 ALTER TABLE major.divisions OWNER TO karisch;
 
 --
--- TOC entry 207 (class 1259 OID 32936)
+-- TOC entry 207 (class 1259 OID 33950)
 -- Name: games; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -155,7 +154,7 @@ CREATE TABLE major.games (
 ALTER TABLE major.games OWNER TO karisch;
 
 --
--- TOC entry 208 (class 1259 OID 32942)
+-- TOC entry 208 (class 1259 OID 33956)
 -- Name: leagues; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -164,18 +163,14 @@ CREATE TABLE major.leagues (
     season integer NOT NULL,
     name character varying(50),
     abbrev character varying(50),
-    "nameShort" character varying(50),
-    "regSeasonStart" character varying(50),
-    "regSeasonEnd" character varying(50),
-    "preSeasonStart" character varying(50),
-    "preSeasonEnd" character varying(50)
+    "nameShort" character varying(50)
 );
 
 
 ALTER TABLE major.leagues OWNER TO karisch;
 
 --
--- TOC entry 209 (class 1259 OID 32945)
+-- TOC entry 209 (class 1259 OID 33959)
 -- Name: pitches; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -193,50 +188,50 @@ CREATE TABLE major.pitches (
     "hasReview" character varying(50),
     "countBalls" integer,
     "countStrikes" integer,
-    "startSpeed" numeric(1,0),
-    "endSpeed" numeric(1,0),
-    "szTop" numeric(2,0),
-    "szBottom" numeric(2,0),
-    "aX" numeric(2,0),
-    "aY" numeric(2,0),
-    "aZ" numeric(2,0),
-    "pfxX" numeric(2,0),
-    "pfxZ" numeric(2,0),
-    "pX" numeric(2,0),
-    "pZ" numeric(2,0),
-    "vX0" numeric(2,0),
-    "vY0" numeric(2,0),
-    "vZ0" numeric(2,0),
-    x numeric(2,0),
-    y numeric(2,0),
-    x0 numeric(2,0),
-    y0 numeric(2,0),
-    z0 numeric(2,0),
-    "breakAngle" numeric(1,0),
-    "breakLength" numeric(1,0),
-    "breakY" numeric(1,0),
+    "startSpeed" numeric(5,1),
+    "endSpeed" numeric(5,1),
+    "szTop" numeric(5,2),
+    "szBottom" numeric(5,2),
+    "aX" numeric(5,2),
+    "aY" numeric(5,2),
+    "aZ" numeric(5,2),
+    "pfxX" numeric(5,2),
+    "pfxZ" numeric(5,2),
+    "pX" numeric(5,2),
+    "pZ" numeric(5,2),
+    "vX0" numeric(5,2),
+    "vY0" numeric(5,2),
+    "vZ0" numeric(5,2),
+    x numeric(5,2),
+    y numeric(5,2),
+    x0 numeric(5,2),
+    y0 numeric(5,2),
+    z0 numeric(5,2),
+    "breakAngle" numeric(5,1),
+    "breakLength" numeric(5,1),
+    "breakY" numeric(5,1),
     "spinRate" integer,
     "spinDirection" integer,
     zone integer,
-    "typeConfidence" numeric(2,0),
-    "plateTime" numeric(2,0),
-    extension numeric(2,0),
+    "typeConfidence" numeric(5,2),
+    "plateTime" numeric(5,2),
+    extension numeric(5,2),
     "pitchNumber" integer,
-    "launchSpeed" numeric(2,0),
-    "launchAngle" numeric(2,0),
-    "totalDistance" numeric(2,0),
+    "launchSpeed" numeric(5,2),
+    "launchAngle" numeric(5,2),
+    "totalDistance" numeric(5,2),
     trajectory character varying(50),
     hardness character varying(50),
     location integer,
-    "coordX" numeric(2,0),
-    "coordY" numeric(2,0)
+    "coordX" numeric(5,2),
+    "coordY" numeric(5,2)
 );
 
 
 ALTER TABLE major.pitches OWNER TO karisch;
 
 --
--- TOC entry 210 (class 1259 OID 32952)
+-- TOC entry 210 (class 1259 OID 33965)
 -- Name: players; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -272,7 +267,7 @@ CREATE TABLE major.players (
 ALTER TABLE major.players OWNER TO karisch;
 
 --
--- TOC entry 211 (class 1259 OID 32958)
+-- TOC entry 211 (class 1259 OID 33971)
 -- Name: runners; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -290,14 +285,15 @@ CREATE TABLE major.runners (
     "isScoringEvent" character varying(50),
     rbi character varying(50),
     earned character varying(50),
-    "outBase" character varying(50)
+    "outBase" character varying(50),
+    "runnerIndex" integer NOT NULL
 );
 
 
 ALTER TABLE major.runners OWNER TO karisch;
 
 --
--- TOC entry 214 (class 1259 OID 33080)
+-- TOC entry 212 (class 1259 OID 33977)
 -- Name: seasons; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -318,7 +314,7 @@ CREATE TABLE major.seasons (
 ALTER TABLE major.seasons OWNER TO karisch;
 
 --
--- TOC entry 212 (class 1259 OID 32964)
+-- TOC entry 213 (class 1259 OID 33980)
 -- Name: teams; Type: TABLE; Schema: major; Owner: karisch
 --
 
@@ -342,35 +338,52 @@ CREATE TABLE major.teams (
 ALTER TABLE major.teams OWNER TO karisch;
 
 --
--- TOC entry 213 (class 1259 OID 32967)
+-- TOC entry 214 (class 1259 OID 33983)
 -- Name: venues; Type: TABLE; Schema: major; Owner: karisch
 --
 
 CREATE TABLE major.venues (
     id integer NOT NULL,
-    name character varying(100)
+    name character varying(100),
+    city character varying(50),
+    state character varying(50),
+    latitude character varying(50),
+    longitude character varying(50),
+    "tzOffset" character varying(50),
+    "tzName" character varying(50),
+    capacity integer,
+    "turfType" character varying(50),
+    "roofType" character varying(50),
+    "leftLine" integer,
+    "leftCenter" integer,
+    center integer,
+    "rightCenter" integer,
+    "rightLine" integer
 );
 
 
 ALTER TABLE major.venues OWNER TO karisch;
 
-
+--
+-- TOC entry 2815 (class 2606 OID 33987)
+-- Name: actions actions_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
+--
 
 ALTER TABLE ONLY major.actions
     ADD CONSTRAINT actions_pkey PRIMARY KEY ("gamePk", "atBatIndex", "actionIndex");
 
 
 --
--- TOC entry 2816 (class 2606 OID 32973)
--- Name: atBats atBats_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
+-- TOC entry 2817 (class 2606 OID 33989)
+-- Name: atbats atBats_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
-ALTER TABLE ONLY major."atBats"
+ALTER TABLE ONLY major.atbats
     ADD CONSTRAINT "atBats_pkey" PRIMARY KEY ("gamePk", "atBatIndex");
 
 
 --
--- TOC entry 2818 (class 2606 OID 32975)
+-- TOC entry 2819 (class 2606 OID 33991)
 -- Name: divisions divisions_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -379,7 +392,7 @@ ALTER TABLE ONLY major.divisions
 
 
 --
--- TOC entry 2820 (class 2606 OID 32977)
+-- TOC entry 2821 (class 2606 OID 33993)
 -- Name: games games_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -388,7 +401,7 @@ ALTER TABLE ONLY major.games
 
 
 --
--- TOC entry 2822 (class 2606 OID 32979)
+-- TOC entry 2823 (class 2606 OID 33995)
 -- Name: leagues leagues_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -397,7 +410,7 @@ ALTER TABLE ONLY major.leagues
 
 
 --
--- TOC entry 2824 (class 2606 OID 32981)
+-- TOC entry 2825 (class 2606 OID 33997)
 -- Name: pitches pitches_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -406,7 +419,7 @@ ALTER TABLE ONLY major.pitches
 
 
 --
--- TOC entry 2826 (class 2606 OID 32983)
+-- TOC entry 2827 (class 2606 OID 33999)
 -- Name: players players_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -415,16 +428,16 @@ ALTER TABLE ONLY major.players
 
 
 --
--- TOC entry 2828 (class 2606 OID 32985)
+-- TOC entry 2829 (class 2606 OID 34001)
 -- Name: runners runners_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
 ALTER TABLE ONLY major.runners
-    ADD CONSTRAINT runners_pkey PRIMARY KEY ("gamePk", "atBatIndex", "playIndex");
+    ADD CONSTRAINT runners_pkey PRIMARY KEY ("gamePk", "atBatIndex", "runnerIndex");
 
 
 --
--- TOC entry 2834 (class 2606 OID 33084)
+-- TOC entry 2831 (class 2606 OID 34003)
 -- Name: seasons seasons_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -433,7 +446,7 @@ ALTER TABLE ONLY major.seasons
 
 
 --
--- TOC entry 2830 (class 2606 OID 32987)
+-- TOC entry 2833 (class 2606 OID 34005)
 -- Name: teams teams_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -442,7 +455,7 @@ ALTER TABLE ONLY major.teams
 
 
 --
--- TOC entry 2832 (class 2606 OID 32989)
+-- TOC entry 2835 (class 2606 OID 34007)
 -- Name: venues venues_pkey; Type: CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -451,34 +464,7 @@ ALTER TABLE ONLY major.venues
 
 
 --
--- TOC entry 2835 (class 2606 OID 32990)
--- Name: actions atbatFK_actions->atbats; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major.actions
-    ADD CONSTRAINT "atbatFK_actions->atbats" FOREIGN KEY ("gamePk", "atBatIndex") REFERENCES major."atBats"("gamePk", "atBatIndex") NOT VALID;
-
-
---
--- TOC entry 2848 (class 2606 OID 32995)
--- Name: pitches atbatFK_pitches->atbat; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major.pitches
-    ADD CONSTRAINT "atbatFK_pitches->atbat" FOREIGN KEY ("gamePk", "atBatIndex") REFERENCES major."atBats"("gamePk", "atBatIndex") NOT VALID;
-
-
---
--- TOC entry 2850 (class 2606 OID 33000)
--- Name: runners atbatFK_runners->atbats; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major.runners
-    ADD CONSTRAINT "atbatFK_runners->atbats" FOREIGN KEY ("gamePk", "atBatIndex") REFERENCES major."atBats"("gamePk", "atBatIndex") NOT VALID;
-
-
---
--- TOC entry 2843 (class 2606 OID 33005)
+-- TOC entry 2838 (class 2606 OID 34008)
 -- Name: games awayTeamFK_games->teams; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -487,16 +473,7 @@ ALTER TABLE ONLY major.games
 
 
 --
--- TOC entry 2838 (class 2606 OID 33010)
--- Name: atBats batterFK_atbats->players; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major."atBats"
-    ADD CONSTRAINT "batterFK_atbats->players" FOREIGN KEY ("batterID") REFERENCES major.players(id) NOT VALID;
-
-
---
--- TOC entry 2853 (class 2606 OID 33015)
+-- TOC entry 2846 (class 2606 OID 34013)
 -- Name: teams divisionFK_teams->divisions; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -505,7 +482,7 @@ ALTER TABLE ONLY major.teams
 
 
 --
--- TOC entry 2836 (class 2606 OID 33020)
+-- TOC entry 2836 (class 2606 OID 34018)
 -- Name: actions gameFK_actions->games; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -514,16 +491,7 @@ ALTER TABLE ONLY major.actions
 
 
 --
--- TOC entry 2839 (class 2606 OID 33025)
--- Name: atBats gameFK_atbats->games; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major."atBats"
-    ADD CONSTRAINT "gameFK_atbats->games" FOREIGN KEY ("gamePk") REFERENCES major.games(pk) NOT VALID;
-
-
---
--- TOC entry 2849 (class 2606 OID 33030)
+-- TOC entry 2843 (class 2606 OID 34023)
 -- Name: pitches gameFK_pitches->games; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -532,7 +500,7 @@ ALTER TABLE ONLY major.pitches
 
 
 --
--- TOC entry 2851 (class 2606 OID 33035)
+-- TOC entry 2844 (class 2606 OID 34028)
 -- Name: runners gameFK_runners->games; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -541,7 +509,7 @@ ALTER TABLE ONLY major.runners
 
 
 --
--- TOC entry 2844 (class 2606 OID 33040)
+-- TOC entry 2839 (class 2606 OID 34033)
 -- Name: games homeTeamFK_games->teams; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -550,16 +518,7 @@ ALTER TABLE ONLY major.games
 
 
 --
--- TOC entry 2841 (class 2606 OID 33045)
--- Name: divisions leagueFK_divisions->leagues; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major.divisions
-    ADD CONSTRAINT "leagueFK_divisions->leagues" FOREIGN KEY ("leagueId", season) REFERENCES major.leagues(id, season) NOT VALID;
-
-
---
--- TOC entry 2854 (class 2606 OID 33050)
+-- TOC entry 2847 (class 2606 OID 34043)
 -- Name: teams leagueFK_teams->leagues; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -568,16 +527,7 @@ ALTER TABLE ONLY major.teams
 
 
 --
--- TOC entry 2840 (class 2606 OID 33055)
--- Name: atBats pitcherFK_atbats->players; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major."atBats"
-    ADD CONSTRAINT "pitcherFK_atbats->players" FOREIGN KEY ("pitcherID") REFERENCES major.players(id) NOT VALID;
-
-
---
--- TOC entry 2837 (class 2606 OID 33060)
+-- TOC entry 2837 (class 2606 OID 34048)
 -- Name: actions playerFK_actions->players; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -586,7 +536,7 @@ ALTER TABLE ONLY major.actions
 
 
 --
--- TOC entry 2852 (class 2606 OID 33065)
+-- TOC entry 2845 (class 2606 OID 34053)
 -- Name: runners runnerFK_runners->players; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -595,16 +545,7 @@ ALTER TABLE ONLY major.runners
 
 
 --
--- TOC entry 2842 (class 2606 OID 33085)
--- Name: divisions seasonFK_divisions->seasons; Type: FK CONSTRAINT; Schema: major; Owner: karisch
---
-
-ALTER TABLE ONLY major.divisions
-    ADD CONSTRAINT "seasonFK_divisions->seasons" FOREIGN KEY (season) REFERENCES major.seasons("seasonId") NOT VALID;
-
-
---
--- TOC entry 2846 (class 2606 OID 33090)
+-- TOC entry 2840 (class 2606 OID 34063)
 -- Name: games seasonFK_games->seasons; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -613,7 +554,7 @@ ALTER TABLE ONLY major.games
 
 
 --
--- TOC entry 2847 (class 2606 OID 33095)
+-- TOC entry 2842 (class 2606 OID 34068)
 -- Name: leagues seasonFK_leagues->seasons; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -622,7 +563,7 @@ ALTER TABLE ONLY major.leagues
 
 
 --
--- TOC entry 2856 (class 2606 OID 33100)
+-- TOC entry 2848 (class 2606 OID 34073)
 -- Name: teams seasonFK_teams->seasons; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -631,7 +572,7 @@ ALTER TABLE ONLY major.teams
 
 
 --
--- TOC entry 2845 (class 2606 OID 33070)
+-- TOC entry 2841 (class 2606 OID 34078)
 -- Name: games venueFK_games->venues; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -640,7 +581,7 @@ ALTER TABLE ONLY major.games
 
 
 --
--- TOC entry 2855 (class 2606 OID 33075)
+-- TOC entry 2849 (class 2606 OID 34083)
 -- Name: teams venueFK_teams->venues; Type: FK CONSTRAINT; Schema: major; Owner: karisch
 --
 
@@ -648,7 +589,7 @@ ALTER TABLE ONLY major.teams
     ADD CONSTRAINT "venueFK_teams->venues" FOREIGN KEY ("venueID") REFERENCES major.venues(id) NOT VALID;
 
 
--- Completed on 2020-10-22 00:28:35
+-- Completed on 2020-10-22 23:19:00
 
 --
 -- PostgreSQL database dump complete
