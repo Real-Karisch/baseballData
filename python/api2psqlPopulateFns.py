@@ -1,3 +1,4 @@
+from api2psqlSupporting import generateGamePksFromDates
 import statsapi
 import psycopg2
 import psycopg2.extras
@@ -79,7 +80,7 @@ def populateLeagueTable(dbConnection):
         )
         cur.execute("SET session_replication_role='origin';")
 
-def populatePlayerTable(dbConnection, startDate, endDate):
+def populatePlayerTable(dbConnection, startDate, endDate, playersPulled = []):
     startYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', startDate).group(1))
     endYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', endDate).group(1))
 
@@ -88,7 +89,7 @@ def populatePlayerTable(dbConnection, startDate, endDate):
     seasons = list(range(startYear, endYear + 1))
 
     args = []
-    playerIds = []
+    playerIds = playersPulled
 
     for sport in sports:
         for season in seasons:
@@ -101,7 +102,7 @@ def populatePlayerTable(dbConnection, startDate, endDate):
                             dictTry(player, ['id']),
                             dictTry(player, ['fullName']),
                             dictTry(player, ['firstName']),
-                            dictTry(player, ['lastName']),
+                            dictTry(player, ['lastName']), 
                             dictTry(player, ['primaryNumber']),
                             dictTry(player, ['birthDate']),
                             dictTry(player, ['birthCity']),
@@ -125,6 +126,8 @@ def populatePlayerTable(dbConnection, startDate, endDate):
                             dictTry(player, ['strikeZoneBottom'])
                         )
                     )
+                    playerIds.append(player['id'])
+
     with dbConnection.cursor() as cur:
         cur.execute("SET session_replication_role='replica';")
         psycopg2.extras.execute_batch(
@@ -164,7 +167,7 @@ def populatePlayerTable(dbConnection, startDate, endDate):
         )
         cur.execute("SET session_replication_role='origin';")
 
-def populateSeasonTable(dbConnection, startDate, endDate):
+def populateSeasonTable(dbConnection, startDate, endDate, seasonsPulled = []):
     startYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', startDate).group(1))
     endYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', endDate).group(1))
 
@@ -174,20 +177,22 @@ def populateSeasonTable(dbConnection, startDate, endDate):
         seasons = statsapi.get('season', {'seasonId': year, 'sportId': 1})['seasons']
 
         for season in seasons:
-            args.append(
-                (
-                    season['seasonId'],
-                    season['regularSeasonStartDate'],
-                    season['regularSeasonEndDate'],
-                    dictTry(season, ['preSeasonStartDate']),
-                    dictTry(season, ['preSeasonEndDate']),
-                    season['postSeasonStartDate'],
-                    season['postSeasonEndDate'],
-                    dictTry(season, ['lastDate1stHalf']),
-                    dictTry(season, ['firstDate2ndHalf']),
-                    season['allStarDate']
+            if season['seasonId'] not in seasonsPulled:
+                args.append(
+                    (
+                        season['seasonId'],
+                        season['regularSeasonStartDate'],
+                        season['regularSeasonEndDate'],
+                        dictTry(season, ['preSeasonStartDate']),
+                        dictTry(season, ['preSeasonEndDate']),
+                        season['postSeasonStartDate'],
+                        season['postSeasonEndDate'],
+                        dictTry(season, ['lastDate1stHalf']),
+                        dictTry(season, ['firstDate2ndHalf']),
+                        dictTry(season, ['allStarDate'])
+                    )
                 )
-            )
+                seasonsPulled.append(season['seasonId'])
 
     with dbConnection.cursor() as cur:
         cur.execute("SET session_replication_role='replica';")
@@ -213,31 +218,42 @@ def populateSeasonTable(dbConnection, startDate, endDate):
         )
         cur.execute("SET session_replication_role='origin';")
 
-def populateTeamTable(dbConnection):
-    teams = statsapi.get('teams', {})['teams']
+def populateTeamTable(dbConnection, startDate, endDate, teamsPulled = []):
+    startYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', startDate).group(1))
+    endYear = int(re.search('\d\d.\d\d.(\d\d\d\d)', endDate).group(1))
 
-    teams = [x for x in teams if 'division' in x.keys() and 'league' in x.keys()]
-    teams = [x for x in teams if 'id' in x['league'].keys()]
+    years = range(startYear, endYear + 1)
 
     args = []
-    for team in teams:
-        args.append(
-            (
-                team['id'],
-                team['name'],
-                team['season'],
-                team['venue']['id'],
-                team['teamCode'],
-                team['fileCode'],
-                team['abbreviation'],
-                team['teamName'],
-                team['locationName'],
-                team['firstYearOfPlay'],
-                team['league']['id'],
-                team['division']['id'],
-                team['shortName']
-            )
-        )
+
+    for year in years:
+
+        teams = statsapi.get('teams', {'season' : year})['teams']
+
+        teams = [x for x in teams if 'division' in x.keys() and 'league' in x.keys()]
+        teams = [x for x in teams if 'id' in x['league'].keys()]
+
+        for team in teams:
+            if (team['id'], team['season']) not in teamsPulled:
+                args.append(
+                    (
+                        team['id'],
+                        team['name'],
+                        team['season'],
+                        team['venue']['id'],
+                        team['teamCode'],
+                        team['fileCode'],
+                        dictTry(team, ['abbreviation']),
+                        team['teamName'],
+                        team['locationName'],
+                        team['firstYearOfPlay'],
+                        team['league']['id'],
+                        team['division']['id'],
+                        team['shortName']
+                    )
+                )
+                teamsPulled.append((team['id'], team['season']))
+
     with dbConnection.cursor() as cur:
         cur.execute("SET session_replication_role='replica';")
         psycopg2.extras.execute_batch(
@@ -294,7 +310,7 @@ def populateVenueTable(dbConnection, venueArgs):
         )
         cur.execute("SET session_replication_role='origin';")
 
-def populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathListListDict, commandDict):
+def populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathListListDict, commandDict, gamesPulled = []):
     for key, value in commandDict.items():
         commandDict[key] = value.format(schema = schema)
 
@@ -309,13 +325,17 @@ def populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathList
     }
 
     for gamePk in gamePks:
-        game = statsapi.get('game', {'gamePk': gamePk})
+        if gamePk not in gamesPulled:
 
-        argsDict['games'].append(generateGameArgs(game, pathListListDict['games']))
-        argsDict['atBats'] += generateAtBatArgs(game, pathListListDict['atBats'])
-        argsDict['actions'] += generateActionArgs(game, pathListListDict['actions'])
-        argsDict['pitches'] += generatePitchArgs(game, pathListListDict['pitches'])
-        argsDict['runners'] += generateRunnerArgs(game, pathListListDict['runners'])
+            game = statsapi.get('game', {'gamePk': gamePk})
+
+            argsDict['games'].append(generateGameArgs(game, pathListListDict['games']))
+            argsDict['atBats'] += generateAtBatArgs(game, pathListListDict['atBats'])
+            argsDict['actions'] += generateActionArgs(game, pathListListDict['actions'])
+            argsDict['pitches'] += generatePitchArgs(game, pathListListDict['pitches'])
+            argsDict['runners'] += generateRunnerArgs(game, pathListListDict['runners'])
+
+            gamesPulled.append(gamePk)
 
     with dbConnection.cursor() as cur:
         cur.execute("SET session_replication_role='replica';")
@@ -329,17 +349,34 @@ def populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathList
         cur.execute("SET session_replication_role='origin';")
 
 def populateMajorTablesMaster(dbConnection):
-    startDate = '01/01/2019'
-    endDate = '12/31/2019'
+    startDate = '01/01/2015'
+    endDate = '12/31/2020'
     schema = 'major'
 
     populateDivisionTable(dbConnection)
     populateLeagueTable(dbConnection)
     populatePlayerTable(dbConnection, startDate, endDate)
     populateSeasonTable(dbConnection, startDate, endDate)
-    populateTeamTable(dbConnection)
+    populateTeamTable(dbConnection, startDate, endDate)
     populateVenueTable(dbConnection, venueArgs)
     populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathListListDict, commandDict)
 
     dbConnection.commit()
-    dbConnection.close()
+
+def updateMajorTablesMaster(dbConnection, startDate, endDate):
+    with dbConnection.cursor() as cur:
+        cur.execute("SELECT pk FROM major.games;")
+        gamesPulled = [x[0] for x in cur.fetchall()]
+        cur.execute("""SELECT "seasonId" FROM major.seasons;""")
+        seasonsPulled = [x[0] for x in cur.fetchall()]
+        cur.execute("""SELECT id FROM major.players;""")
+        playersPulled = [x[0] for x in cur.fetchall()]
+        cur.execute("""SELECT id, season FROM teams;""")
+        teamsPulled = cur.fetchall()
+
+    populatePlayerTable(dbConnection, startDate, endDate, playersPulled)
+    populateSeasonTable(dbConnection, startDate, endDate, seasonsPulled)
+    populateTeamTable(dbConnection, startDate, endDate, teamsPulled)
+    populateGamesTablesMaster(dbConnection, schema, startDate, endDate, pathListListDict, commandDict, gamesPulled)
+    
+    dbConnection.commit()

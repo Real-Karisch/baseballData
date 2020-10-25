@@ -1,5 +1,6 @@
 import psycopg2
 import statsapi
+import re
 
 conn = psycopg2.connect(
     host = "localhost",
@@ -385,10 +386,34 @@ def dictTry(dict, keyList):
 #        endDate is the last day of the period ('mm/dd/yyyy' string format)
 #output: a list of game pks
 def generateGamePksFromDates(startDate, endDate):
-    sched = statsapi.schedule(start_date = startDate, end_date = endDate) #call to the mlb website to scrape the raw data
+    firstDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', startDate)
+    lastDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', endDate)
+
+    firstDateYear = int(firstDateSearch.group(3))
+    lastDateYear = int(lastDateSearch.group(3))
+
+    years = list(range(firstDateYear, lastDateYear + 1))
+
+    if len(years) == 1:
+        sched = statsapi.schedule(start_date=startDate, end_date=endDate)
+    else:
+
+        activeStart = startDate
+        
+        sched = []
+        for year in years:
+            if year == years[-1]:
+                activeEnd = endDate
+            else:
+                activeEnd = '12/31/' + str(year)
+
+            sched += statsapi.schedule(start_date = activeStart, end_date = activeEnd)
+
+            activeStart = '01/01/' + str(year + 1)
+
     gamePks = [x['game_id'] for x in sched] #list comp to pull the gamePk from each game scraped (come through in JSON format)
-    #return list(set(gamePks))
     return list(set(gamePks))
+    #return gamePks
 
 #function to locate a particular item within a JSON object (formatted as dictionary of dictionaries and lists by python)
 #inputs: jsonObj is a dictionary that is derived directly from a JSON file. It contains a number of sub and sub-sub dictionaries and lists
