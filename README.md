@@ -7,6 +7,7 @@ The schema are:
   minor, containing tables with Minor League data
 
 The output tables in the major schema are:
+<p style="margin-left: 40px">
   <br>
   actions, containing data on non-pitch events during games
   <br>
@@ -30,6 +31,6 @@ The output tables in the major schema are:
   <br>
   seasons, containing data on key dates in the schedule
   <br>
-  
+</p>
 The output tables in the minor schema are:
   
