@@ -7,17 +7,29 @@ The schema are:
   minor, containing tables with Minor League data
 
 The output tables in the major schema are:
+  <br>
   actions, containing data on non-pitch events during games
+  <br>
   atbats, containing data on each at bat
+  <br>
   divisions, containing data on every Major League division
+  <br>
   games, containing data on every game
+  <br>
   leagues, containing data on the two MLB leagues
+  <br>
   pitches, containing data on every pitch
+  <br>
   players, containing data on all MLB players
+  <br>
   runners, containing data on runner movement during each at bat
+  <br>
   teams, containing data on every team
+  <br>
   venues, containing data on every venue used for MLB games
+  <br>
   seasons, containing data on key dates in the schedule
+  <br>
   
 The output tables in the minor schema are:
   
