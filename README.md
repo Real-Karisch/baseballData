@@ -1,3 +1,4 @@
+<p>
 Baseball is the perfect blend of my interests. No other sport offers as rich an opportunity for statistical analysis. Fortunately, the MLB offers a staggering amount of data to the public through its API. This project pulls data from that API to build a local PostgreSQL database with any data I felt could be in any way useful in future projects.
 
 The project makes use of the MLB-StatsAPI python library (https://pypi.org/project/MLB-StatsAPI/) to handle API requests, and the psycopg2 library (https://pypi.org/project/psycopg2/) for database management.
@@ -33,4 +34,5 @@ The output tables in the major schema are:
   <br>
 </p>
 The output tables in the minor schema are:
-  
+
+</p?
