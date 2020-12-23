@@ -1,6 +1,7 @@
 import psycopg2
 import statsapi
 import re
+import datetime
 
 conn = psycopg2.connect(
     host = "localhost",
@@ -148,6 +149,116 @@ pathListListDict = {
     ]
 }
 
+pathListListDictMinor = {
+    'games': [
+        ['gameData','game','pk'],
+        ['gameData','game','type'],
+        ['gameData','game','doubleHeader'],
+        ['gameData','game','id'],
+        ['gameData','game','gamedayType'],
+        ['gameData','game','tiebreaker'],
+        ['gameData','game','calendarEventID'],
+        ['gameData','game','season'],
+        ['gameData','game','seasonDisplay'],
+        ['gameData','datetime','datetime'],
+        ['gameData','datetime','originalDate'],
+        ['gameData','datetime','dayNight'],
+        ['gameData','datetime','time'],
+        ['gameData','datetime','ampm'],
+        ['gameData','teams','away','record','gamesPlayed'],
+        ['gameData','teams','away','record','wins'],
+        ['gameData','teams','away','record','losses'],
+        ['gameData','teams','home','record','gamesPlayed'],
+        ['gameData','teams','home','record','wins'],
+        ['gameData','teams','home','record','losses'],
+        ['gameData','venue','id'],
+        ['gameData','weather','condition'],
+        ['gameData','weather','temp'],
+        ['gameData','weather','wind'],
+        ['gameData','flags','noHitter'],
+        ['gameData','flags','perfectGame'],
+        ['gameData','teams','away','id'],
+        ['gameData','teams','home','id'],
+        ['gameData','teams','away','parentOrgId'],
+        ['gameData','teams','home','parentOrgId'],
+        ['gameData','teams','home','sport','id']
+    ],
+    'actions': [
+        ['gameData','game','pk'],
+        ['liveData','plays','allPlays','atBatIndex'],
+        ['liveData','plays','allPlays','playEvents','index'],
+        ['liveData','plays','allPlays','playEvents','details','event'],
+        ['liveData','plays','allPlays','playEvents','details','awayScore'],
+        ['liveData','plays','allPlays','playEvents','details','homeScore'],
+        ['liveData','plays','allPlays','playEvents','details','isScoringPlay'],
+        ['liveData','plays','allPlays','playEvents','count','balls'],
+        ['liveData','plays','allPlays','playEvents','count','strikes'],
+        ['liveData','plays','allPlays','playEvents','count','outs'],
+        ['liveData','plays','allPlays','playEvents','isPitch'],
+        ['liveData','plays','allPlays','playEvents','player','id'],
+        ['liveData','plays','allPlays','playEvents','details','description']
+    ],
+    'atBats': [
+        ['gameData','game','pk'],
+        ['liveData','plays','allPlays','about','atBatIndex'],
+        ['liveData','plays','allPlays','result','event'],
+        ['liveData','plays','allPlays','result','eventType'],
+        ['liveData','plays','allPlays','result','description'],
+        ['liveData','plays','allPlays','result','rbi'],
+        ['liveData','plays','allPlays','result','awayScore'],
+        ['liveData','plays','allPlays','result','homeScore'],
+        ['liveData','plays','allPlays','about','halfInning'],
+        ['liveData','plays','allPlays','about','inning'],
+        ['liveData','plays','allPlays','about','isScoringPlay'],
+        ['liveData','plays','allPlays','about','hasReview'],
+        ['liveData','plays','allPlays','about','hasOut'],
+        ['liveData','plays','allPlays','about','captivatingIndex'],
+        ['liveData','plays','allPlays','matchup','batter','id'],
+        ['liveData','plays','allPlays','matchup','batSide','code'],
+        ['liveData','plays','allPlays','matchup','batSide','description'],
+        ['liveData','plays','allPlays','matchup','pitcher','id']
+    ],
+    'pitches': [
+        ['gameData','game','pk'],
+        ['liveData','plays','allPlays','about','atBatIndex'],
+        ['liveData','plays','allPlays','playEvents','index'],
+        ['liveData','plays','allPlays','playEvents','details','code'],
+        ['liveData','plays','allPlays','playEvents','details','description'],
+        ['liveData','plays','allPlays','playEvents','details','isInPlay'],
+        ['liveData','plays','allPlays','playEvents','details','isStrike'],
+        ['liveData','plays','allPlays','playEvents','details','isBall'],
+        ['liveData','plays','allPlays','playEvents','details','hasReview'],
+        ['liveData','plays','allPlays','playEvents','count','balls'],
+        ['liveData','plays','allPlays','playEvents','count','strikes'],
+        ['liveData','plays','allPlays','playEvents','pitchData','strikeZoneTop'],
+        ['liveData','plays','allPlays','playEvents','pitchData','strikeZoneBottom'],
+        ['liveData','plays','allPlays','playEvents','pitchData','coordinates','x'],
+        ['liveData','plays','allPlays','playEvents','pitchData','coordinates','y'],
+        ['liveData','plays','allPlays','playEvents','pitchNumber'],
+        ['liveData','plays','allPlays','playEvents','hitData','trajectory'],
+        ['liveData','plays','allPlays','playEvents','hitData','hardness'],
+        ['liveData','plays','allPlays','playEvents','hitData','location'],
+        ['liveData','plays','allPlays','playEvents','hitData','coordinates','coordX'],
+        ['liveData','plays','allPlays','playEvents','hitData','coordinates','coordY']
+    ],
+    'runners': [
+        ['gameData','game','pk'],
+        ['liveData','plays','allPlays','about','atBatIndex'],
+        ['liveData','plays','allPlays','runners','details','playIndex'],
+        ['liveData','plays','allPlays','runners','movement','start'],
+        ['liveData','plays','allPlays','runners','movement','end'],
+        ['liveData','plays','allPlays','runners','movement','isOut'],
+        ['liveData','plays','allPlays','runners','movement','outNumber'],
+        ['liveData','plays','allPlays','runners','details','eventType'],
+        ['liveData','plays','allPlays','runners','details','movementReason'],
+        ['liveData','plays','allPlays','runners','details','runner','id'],
+        ['liveData','plays','allPlays','runners','details','isScoringEvent'],
+        ['liveData','plays','allPlays','runners','details','rbi'],
+        ['liveData','plays','allPlays','runners','details','earned'],
+        ['liveData','plays','allPlays','runners','movement','outBase']
+    ]
+}
+
 venueArgs = [
     (2526, 'McKechnie Field', 'Bradenton', 'Florida', 27.48535, -82.57076, -4, 'EDT', 6562, 'Grass', 'Open', 335, None, 400, None, 335),
     (2511, 'Joker Marchant Stadium', 'Lakeland', 'Florida', 28.07437, -81.95113, -4, 'EDT', 8500, 'Grass', 'Open', 340, None, 420, None, 340),
@@ -217,6 +328,132 @@ venueArgs = [
     (3313, 'Yankee Stadium', 'Bronx', 'New York', 40.82919482, -73.9264977, -4, 'EDT', 50287, 'Grass', 'Open', 318, 399, 408, 385, 314),
     (2535, 'Hiram Bithorn Stadium', 'San Juan', None, 18.41666, -66.072817, -4, 'AST', 19778, 'Artificial', 'Open', 325, 375, 404, 375, 325)
 ]
+
+commandDictMinor = {
+        'games': """
+            INSERT INTO {schema}.games(
+                pk,
+                type,
+                "doubleHeader",
+                id,
+                "gamedayType",
+                "tieBreaker",
+                "calendarEventID",
+                season,
+                "seasonDisplay",
+                datetime,
+                "originalDate",
+                "dayNight",
+                time,
+                ampm,
+                "awayGamesPlayed",
+                "awayWins",
+                "awayLosses",
+                "homeGamesPlayed",
+                "homeWins",
+                "homeLosses",
+                "venueID",
+                "weatherConditions",
+                temp,
+                wind,
+                "noHitter",
+                "perfectGame",
+                "awayId",
+                "homeId",
+                "awayParentOrgId",
+                "homeParentOrgId",
+                "sportId"
+                )
+                VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+                """,
+        'actions': """
+            INSERT INTO {schema}.actions(
+                "gamePk",
+                "atBatIndex",
+                "actionIndex",
+                "eventType",
+                "awayScore",
+                "homeScore",
+                "isScoringPlay",
+                balls,
+                strikes,
+                outs,
+                "isPitch",
+                "playerId",
+                "eventDescription"
+                )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+        'atBats': """
+            INSERT INTO {schema}.atbats(
+                "gamePk",
+                "atBatIndex",
+                result,
+                "resultType",
+                "resultDesc",
+                rbi,
+                "awayScore",
+                "homeScore",
+                "isTopInning",
+                inning,
+                "isScoringPlay",
+                "hasReview",
+                "hasOut",
+                "captivatingIndex",
+                "batterID",
+                "batSideCode",
+                "batSideDesc",
+                "pitcherID"
+                )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+        'pitches': """
+            INSERT INTO {schema}.pitches(
+                "gamePk",
+                "atBatIndex",
+                "pitchIndex",
+                "callCode",
+                "callDesc",
+                "isInPlay",
+                "isStrike",
+                "isBall",
+                "hasReview",
+                "countBalls",
+                "countStrikes",
+                "szTop",
+                "szBottom",
+                x,
+                y,
+                "pitchNumber",
+                trajectory,
+                hardness,
+                location,
+                "coordX",
+                "coordY"
+                )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """,
+        'runners': """
+            INSERT INTO {schema}.runners(
+                "gamePk",
+                "atBatIndex",
+                "playIndex",
+                "startBase",
+                "endBase",
+                "isOut",
+                "outNumber",
+                "eventType",
+                "movementReason",
+                "runnerId",
+                "isScoringEvent",
+                rbi,
+                earned,
+                "outBase",
+                "runnerIndex"
+                )
+            VALUES (%s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s, %s)
+            """
+    }
 
 commandDict = {
         'games': """
@@ -385,7 +622,7 @@ def dictTry(dict, keyList):
 #inputs: startDate is the beginning of the period of games to be pulled ('mm/dd/yyyy' string format)
 #        endDate is the last day of the period ('mm/dd/yyyy' string format)
 #output: a list of game pks
-def generateGamePksFromDates(startDate, endDate):
+def generateGamePksFromDates(startDate, endDate, sportId = 1):
     firstDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', startDate)
     lastDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', endDate)
 
@@ -395,7 +632,29 @@ def generateGamePksFromDates(startDate, endDate):
     years = list(range(firstDateYear, lastDateYear + 1))
 
     if len(years) == 1:
-        sched = statsapi.schedule(start_date=startDate, end_date=endDate)
+        try:
+            sched = statsapi.schedule(start_date=startDate, end_date=endDate, sportId = sportId)
+        except:
+            print('Error; start date: ', startDate, ', end date: ', endDate, ', sport: ', sportId, ', switching to daily pulls')
+
+            active = datetime.datetime(int(firstDateSearch.group(3)), int(firstDateSearch.group(2)), int(firstDateSearch.group(1)))
+            last = datetime.datetime(int(lastDateSearch.group(3)), int(lastDateSearch.group(2)), int(lastDateSearch.group(1)))
+            step = datetime.timedelta(days=1)
+
+            dates = []
+
+            while active <= last:
+                dates.append(active.strftime('%m/%d/%Y'))
+                active += step
+
+            sched = []
+
+            for date in dates:
+                try:
+                    sched += statsapi.schedule(date = date, sportId = sportId)
+                except:
+                    print('Error on date: ', date)
+
     else:
 
         activeStart = startDate
@@ -407,7 +666,29 @@ def generateGamePksFromDates(startDate, endDate):
             else:
                 activeEnd = '12/31/' + str(year)
 
-            sched += statsapi.schedule(start_date = activeStart, end_date = activeEnd)
+            try:
+                sched += statsapi.schedule(start_date = activeStart, end_date = activeEnd, sportId = sportId)
+            except:
+                print('Error; start date: ', activeStart, ', end date: ', activeEnd, ', sport: ', sportId, ', switching to daily pulls')
+
+                activeStartSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', activeStart)
+                activeEndSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', activeEnd)
+
+                active = datetime.datetime(int(activeStartSearch.group(3)), int(activeStartSearch.group(1)), int(activeStartSearch.group(2)))
+                last = datetime.datetime(int(activeEndSearch.group(3)), int(activeEndSearch.group(1)), int(activeEndSearch.group(2)))
+                step = datetime.timedelta(days=1)
+
+                dates = []
+
+                while active <= last:
+                    dates.append(active.strftime('%m/%d/%Y'))
+                    active += step
+
+                for date in dates:
+                    try:
+                        sched += statsapi.schedule(date = date, sportId = sportId)
+                    except:
+                        print('Error on date: ', date)
 
             activeStart = '01/01/' + str(year + 1)
 
@@ -508,7 +789,11 @@ def generateRunnerArgs(gameJson, pathListList):
     cnt = 0
 
     for atBat in atBatList:
-        for i in atBat['runnerIndex']:
+        if len(atBat['runnerIndex']) == len(set(atBat['runnerIndex'])):
+            iteratorList = atBat['runnerIndex']
+        else:
+            iteratorList = range(len(atBat['runners']))
+        for i in iteratorList:
             activeItems = []
             for pathList in pathListList:
                 activeItems.append(jsonFind(gameJson, pathList, [cnt, i]))
