@@ -3,6 +3,7 @@ import statsapi
 import re
 import datetime
 
+#This is the connection to the database
 conn = psycopg2.connect(
     host = "localhost",
     database = "baseball",
@@ -11,8 +12,9 @@ conn = psycopg2.connect(
     port = 5432
 )
 
+#This dictionary contains keys that navigate through the game files returned by the API
 pathListListDict = {
-    'games': [
+    'games': [ #Items for the games table
         ['gameData','game','pk'],
         ['gameData','game','type'],
         ['gameData','game','doubleHeader'],
@@ -44,7 +46,7 @@ pathListListDict = {
         ['gameData','teams','away','id'],
         ['gameData','teams','home','id']
     ],
-    'actions': [
+    'actions': [ #Items for the actions table
         ['gameData','game','pk'],
         ['liveData','plays','allPlays','atBatIndex'],
         ['liveData','plays','allPlays','playEvents','index'],
@@ -59,7 +61,7 @@ pathListListDict = {
         ['liveData','plays','allPlays','playEvents','player','id'],
         ['liveData','plays','allPlays','playEvents','details','description']
     ],
-    'atBats': [
+    'atBats': [ #Items for the atBats table
         ['gameData','game','pk'],
         ['liveData','plays','allPlays','about','atBatIndex'],
         ['liveData','plays','allPlays','result','event'],
@@ -79,7 +81,7 @@ pathListListDict = {
         ['liveData','plays','allPlays','matchup','batSide','description'],
         ['liveData','plays','allPlays','matchup','pitcher','id']
     ],
-    'pitches': [
+    'pitches': [ #Items for the pitches table
         ['gameData','game','pk'],
         ['liveData','plays','allPlays','about','atBatIndex'],
         ['liveData','plays','allPlays','playEvents','index'],
@@ -131,7 +133,7 @@ pathListListDict = {
         ['liveData','plays','allPlays','playEvents','hitData','coordinates','coordX'],
         ['liveData','plays','allPlays','playEvents','hitData','coordinates','coordY']
     ],
-    'runners': [
+    'runners': [ #Items for the runners table
         ['gameData','game','pk'],
         ['liveData','plays','allPlays','about','atBatIndex'],
         ['liveData','plays','allPlays','runners','details','playIndex'],
@@ -149,6 +151,7 @@ pathListListDict = {
     ]
 }
 
+#This dictionary contains keys to navigate minor league files returned by the API
 pathListListDictMinor = {
     'games': [
         ['gameData','game','pk'],
@@ -259,6 +262,7 @@ pathListListDictMinor = {
     ]
 }
 
+#The data that goes into the venues table (pulled separately)
 venueArgs = [
     (2526, 'McKechnie Field', 'Bradenton', 'Florida', 27.48535, -82.57076, -4, 'EDT', 6562, 'Grass', 'Open', 335, None, 400, None, 335),
     (2511, 'Joker Marchant Stadium', 'Lakeland', 'Florida', 28.07437, -81.95113, -4, 'EDT', 8500, 'Grass', 'Open', 340, None, 420, None, 340),
@@ -329,6 +333,7 @@ venueArgs = [
     (2535, 'Hiram Bithorn Stadium', 'San Juan', None, 18.41666, -66.072817, -4, 'AST', 19778, 'Artificial', 'Open', 325, 375, 404, 375, 325)
 ]
 
+#Dictionary with the SQL commands to execute to populate the different tables for the minor league schema
 commandDictMinor = {
         'games': """
             INSERT INTO {schema}.games(
@@ -455,6 +460,7 @@ commandDictMinor = {
             """
     }
 
+#Dictionary with SQL commands to execute to populater the major league schema
 commandDict = {
         'games': """
             INSERT INTO {schema}.games(
@@ -609,6 +615,13 @@ commandDict = {
     }
 
 def dictTry(dict, keyList):
+    """
+    Function that tries the key path passed to it, but if any of the keys are missing in the json it will return None
+    Inputs:
+        dict, a dictionary (i.e. json in python) that you'd like extract a value from
+        keyList, a list of keys to navigate the dictionary
+    Outputs None if the keys don't find anything, or the value returned by the last key otherwise
+    """
     active = dict
     for i in range(len(keyList)):
         if keyList[i] not in active.keys():
@@ -623,6 +636,13 @@ def dictTry(dict, keyList):
 #        endDate is the last day of the period ('mm/dd/yyyy' string format)
 #output: a list of game pks
 def generateGamePksFromDates(startDate, endDate, sportId = 1):
+    """
+    Function to generate the unique game pk (ID) for each game played between the dates provided (inclusive)
+    Inputs: 
+        startDate is the beginning of the period of games to be pulled ('mm/dd/yyyy' string format)
+        endDate is the last day of the period ('mm/dd/yyyy' string format)
+    Outputs a list of game pks from the API
+    """
     firstDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', startDate)
     lastDateSearch = re.search('(\d\d).(\d\d).(\d\d\d\d)', endDate)
 
@@ -706,6 +726,16 @@ def generateGamePksFromDates(startDate, endDate, sportId = 1):
 
 
 def jsonFind(jsonObj, path, index):
+    """
+    Function to locate a particular item within a JSON object (formatted as dictionary of dictionaries and lists by python)
+    Inputs:
+        jsonObj is a dictionary that is derived directly from a JSON file. It contains a number of sub and sub-sub dictionaries and lists
+        path is a list of strings that are the keys to navigate the JSON dictionary
+        index is a list of indices to be used whenever a list is encountered during navigation. If the current path key hits a list, the function
+            goes to the next item in index it has not yet accessed and uses the value it finds to access that element of the list it has encountered.
+            Basically, if the number of lists to be encountered is known beforehand, index is a way of navigating to a particular element within those lists
+    Outputs the value found by the last key in the path list
+    """
     temp = jsonObj[path[0]] #initiating temporary variable to navigate through dictionary
     cnt = 0 #counter of lists encountered during navigation
 
@@ -721,6 +751,13 @@ def jsonFind(jsonObj, path, index):
     return(temp)
 
 def generateGameArgs(gameJson, pathListList):
+    """
+    Generates the data to be passed to the game table for a particular game
+    Inputs:
+        gameJson, a game file returned by the API
+        pathListList, a dictionary with keys to navigate the dictionary; defined above
+    Outputs a tuple with the data for the table as a list
+    """
     outputList = []
     for pathList in pathListList:
         outputList.append(jsonFind(gameJson, pathList, []))
@@ -728,6 +765,13 @@ def generateGameArgs(gameJson, pathListList):
     return tuple(outputList)
 
 def generateAtBatArgs(gameJson, pathListList):
+    """
+    Generates the data to be passed to the atBat table for a particular game
+    Inputs:
+        gameJson, a game file returned by the API
+        pathListList, a dictionary with keys to navigate the dictionary; defined above
+    Outputs a tuple with the data for the table as a list
+    """
     atBatList = jsonFind(gameJson, ['liveData','plays','allPlays'], [])
 
     outputList = []
@@ -745,6 +789,13 @@ def generateAtBatArgs(gameJson, pathListList):
     return outputList
 
 def generateActionArgs(gameJson, pathListList):
+    """
+    Generates the data to be passed to the action table for a particular game
+    Inputs:
+        gameJson, a game file returned by the API
+        pathListList, a dictionary with keys to navigate the dictionary; defined above
+    Outputs a tuple with the data for the table as a list
+    """
     atBatList = jsonFind(gameJson, ['liveData','plays','allPlays'], [])
 
     outputList = []
@@ -764,6 +815,13 @@ def generateActionArgs(gameJson, pathListList):
     return outputList
 
 def generatePitchArgs(gameJson, pathListList):
+    """
+    Generates the data to be passed to the pitches table for a particular game
+    Inputs:
+        gameJson, a game file returned by the API
+        pathListList, a dictionary with keys to navigate the dictionary; defined above
+    Outputs a tuple with the data for the table as a list
+    """
     atBatList = jsonFind(gameJson, ['liveData','plays','allPlays'], [])
 
     outputList = []
@@ -783,6 +841,13 @@ def generatePitchArgs(gameJson, pathListList):
     return outputList
 
 def generateRunnerArgs(gameJson, pathListList):
+    """
+    Generates the data to be passed to the runners table for a particular game
+    Inputs:
+        gameJson, a game file returned by the API
+        pathListList, a dictionary with keys to navigate the dictionary; defined above
+    Outputs a tuple with the data for the table as a list
+    """
     atBatList = jsonFind(gameJson, ['liveData','plays','allPlays'], [])
 
     outputList = []
