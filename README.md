@@ -14,6 +14,7 @@ There are four main folders:
 
 The schema are:
   major, containing tables with MLB data
+  <br>
   minor, containing tables with Minor League data
 
 The output tables in the major schema are:
